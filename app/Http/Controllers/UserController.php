@@ -28,6 +28,7 @@ class UserController extends Controller {
 	//register new user
 	//TODO decidere se alla creazione riceve già coim
 	public function register(){
+
 		$data = Request::all();
 
 		$user = new User();
