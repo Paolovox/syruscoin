@@ -136,7 +136,7 @@ class UserController extends Controller {
 
 
 	public function test(){
-		dd($this->multichain->getInfo());
+		dd('ciao');
 	}
 
 
