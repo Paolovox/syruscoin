@@ -20,7 +20,7 @@ class UserController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->multichain = new MultichainClient("http://127.0.0.1:6752", "multichainrpc", "76tMKwnCBg5qsGRbBVYcydzWQg4P16fDhtibW8FcZvKR", 3);
+		$this->multichain = new MultichainClient( env('MULTICHAIN_IP_PORT'), env('MULTICHAIN_USERNAME', 'multichainrpc'),  env('MULTICHAIN_PASSWORD'), 3);
 		$this->helper = new MultichainHelper($this->multichain);
 	}
 
@@ -136,6 +136,7 @@ class UserController extends Controller {
 
 
 	public function test(){
+		dd($this->multichain->getInfo());
 		dd('ciao');
 	}
 
