@@ -27,3 +27,6 @@ Route::post("/api/login","UserController@login");
 Route::post("/api/register","UserController@register");
 Route::post("/api/get-coin-qty","UserController@getCoinQty");
 Route::post("/api/send-to","UserController@sentTo");
+
+
+Route::get('/random',"UserController@randomTransactions");

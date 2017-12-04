@@ -135,11 +135,63 @@ class UserController extends Controller {
 	}
 
 
-	public function test(){
-		dd($this->multichain->getInfo());
-		dd('ciao');
+
+	private function listAddresses(){
+		return $this->multichain->listAllAddresses();
+	}
+
+	private function getCoinByAddress($address, $asset){
+		$coin = $this->multichain->getCoinQty($address,$asset);
+		if($coin){
+			return $coin['total'][0]['qty'];
+		}
+		return -1;
+	}
+
+	public function randomTransactions(){
+
+		$addresses = $this->listAddresses();
+		// dump($addresses);
+		$n_addressess = count($addresses);
+
+		$from_address = rand(0,$n_addressess-1);
+		$to_address = rand(0,$n_addressess-1);
+
+		$from_address = $addresses[$from_address]['address'];
+		$to_address = $addresses[$to_address]['address'];
+
+		// dump($from_address);
+		// dump($to_address);
+
+		if($from_address == $to_address) return false;
+
+		$coin = $this->getCoinByAddress($from_address,"syruscoin");
+		// dump("coins address from = ".$coin);
+		if($coin > 0){
+			$randomCoin = rand(0, 30) / 10;
+
+			// dump("random coins = ".$randomCoin);
+			if($coin > doubleval($randomCoin)){
+				$hash = $this->multichain->sendAssetFrom($from_address, $to_address, "syruscoin", intval($randomCoin));
+				//save transaction
+				$transaction = new Transaction();
+				$transaction->address_from = $from_address;
+				$transaction->address_to = $to_address;
+				$transaction->hash = $hash;
+				$transaction->asset = "syruscoin";
+				$transaction->qty = intval($randomCoin);
+				$transaction->save();
+
+				// dump($hash);
+			}
+		}
 	}
 
 
+		public function test(){
+		//	print_r($this->multichain->getInfo());
+			dd($this->getCoinAllAddresses());
+			dd('ciao');
+		}
 
 }
