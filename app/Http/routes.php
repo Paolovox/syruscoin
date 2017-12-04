@@ -20,14 +20,10 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 
-
-Route::post("get-wallet-balance","UserController@getWalletBalance");
-
-
 Route::get("/test","UserController@test");
 
 
-Route::post("/login","UserController@login");
-Route::post("/register","UserController@register");
-Route::post("/get-coin-qty","UserController@getCoinQty");
-Route::post("/send-to","UserController@sentTo");
+Route::post("/api/login","UserController@login");
+Route::post("/api/register","UserController@register");
+Route::post("/api/get-coin-qty","UserController@getCoinQty");
+Route::post("/api/send-to","UserController@sentTo");
