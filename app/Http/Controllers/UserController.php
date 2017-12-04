@@ -168,11 +168,11 @@ class UserController extends Controller {
 
 		$coin = $this->getCoinByAddress($from_address,"syruscoin");
 		// dump("coins address from = ".$coin);
-		if($coin > 0){
+		if(intval($coin) > 0){
 			$randomCoin = rand(0, 30) / 10;
 
 			// dump("random coins = ".$randomCoin);
-			if($coin > doubleval($randomCoin)){
+			if($coin > doubleval($randomCoin) && doubleval($randomCoin) > 0){
 				$hash = $this->multichain->sendAssetFrom($from_address, $to_address, "syruscoin", intval($randomCoin));
 				//save transaction
 				$transaction = new Transaction();
@@ -186,6 +186,16 @@ class UserController extends Controller {
 				// dump($hash);
 			}
 		}
+	}
+
+	public function getLastTransactions(){
+		$transactions = Transaction::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+		$output = array();
+		foreach ($transactions as $tran) {
+			$tran->delete();
+			$output[] = $tran->toArray();
+		}
+		return response()->json($output);
 	}
 
 

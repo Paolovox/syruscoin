@@ -15,8 +15,19 @@ table {
     position: relative;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+tr:nth-child(n + 8) {
+    display: none;
+}
+
 </style>
 
+<?php
+$transactions = App\Transaction::whereNotNull("deleted_at")->orderBy('created_at', 'desc')->get();
+ ?>
 
 <div class="content-area home-area-1 recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
     <div class="container">
@@ -34,21 +45,13 @@ table {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>57bff79a1a021bd2034f8fb97a42ba9c6f687f81b16c6d2a4730eca932cafad3</td>
-                      <td>2.5 SYC</td>
-                      <td>Dec 4, 2017 4:31:00 AM</td>
-                    </tr>
-                    <tr>
-                      <td>aabff79a1aabr982034f8f123442ba9c6f687f81b16c6d2a4730eca932aht479</td>
-                      <td>0.1 SYC</td>
-                      <td>Dec 4, 2017 4:32:23 AM</td>
-                    </tr>
-                    <tr>
-                      <td>99raf79a1a022342034f8f123442ba9cvree48ass486c6d2a4730eca93a345tgr</td>
-                      <td>1.5 SYC</td>
-                      <td>Dec 4, 2017 4:35:20 AM</td>
-                    </tr>
+                    <?php foreach ($transactions as $tran) { var_dump($transactions); ?>
+                      <tr>
+                        <td><?= $tran->hash; ?></td>
+                        <td><?= $tran->qty ?> SYC</td>
+                        <td><?= $tran->created_at; ?></td>
+                      </tr>
+                    <?php } ?>
                   </tbody>
                 </table>
             </div>
