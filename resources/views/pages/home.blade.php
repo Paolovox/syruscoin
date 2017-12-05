@@ -23,10 +23,11 @@ tr:nth-child(n + 8) {
     display: none;
 }
 
+
 </style>
 
 <?php
-$transactions = App\Transaction::whereNotNull("deleted_at")->orderBy('created_at', 'desc')->get();
+$transactions = \App\Transaction::withTrashed()->whereNotNull('deleted_at')->orderBy('created_at', 'desc')->get();
  ?>
 
 <div class="content-area home-area-1 recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
@@ -36,7 +37,7 @@ $transactions = App\Transaction::whereNotNull("deleted_at")->orderBy('created_at
                 <h2>Ultime Transazioni</h2>
 
 
-                <table class="table table-striped table-hover" style="color:#323232">
+                <table class="transazioni table table-striped table-hover" style="color:#323232">
                   <thead>
                     <tr>
                       <th>Hash</th>
@@ -45,7 +46,7 @@ $transactions = App\Transaction::whereNotNull("deleted_at")->orderBy('created_at
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach ($transactions as $tran) { var_dump($transactions); ?>
+                    <?php foreach ($transactions as $tran) { ?>
                       <tr>
                         <td><?= $tran->hash; ?></td>
                         <td><?= $tran->qty ?> SYC</td>
@@ -83,6 +84,49 @@ $transactions = App\Transaction::whereNotNull("deleted_at")->orderBy('created_at
     </div>
 </div>
 
-
-
 @stop
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+
+function dissolvi(id){
+  $('#'+id).animate({
+      'opacity': '0.5'
+  }, 1000, function () {
+      $('#'+id).css({
+          'backgroundColor': '#fff',
+          'opacity': '1'
+      });
+  });
+}
+
+$(document).ready(function(){
+
+  window.setInterval(function() {
+      $.get('/getLastTransactions',{},function(data){
+        if(data.length > 0){
+          for(var i=0; i<data.length; i++){
+            var trans = data[i];
+
+            var id = trans.id;
+            var address_from = trans.address_from;
+            var address_to = trans.address_to;
+            var hash = trans.hash;
+            var qty = trans.qty;
+
+            var row="<tr id="+id+"><td>"+hash+"</td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
+            $(".transazioni tbody").prepend(row);
+            $('#'+id).css('backgroundColor', '#c5ffc8');
+            dissolvi(id);
+
+          }
+        }
+
+      });
+  }, 10000);
+
+
+});
+
+</script>
