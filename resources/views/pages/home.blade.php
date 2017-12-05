@@ -48,7 +48,7 @@ $transactions = \App\Transaction::withTrashed()->whereNotNull('deleted_at')->ord
                   <tbody>
                     <?php foreach ($transactions as $tran) { ?>
                       <tr>
-                        <td><?= $tran->hash; ?></td>
+                        <td><a href="/transaction?id=<?= $tran->id ?>"><?= $tran->hash; ?></a></td>
                         <td><?= $tran->qty ?> SYC</td>
                         <td><?= $tran->created_at; ?></td>
                       </tr>
@@ -115,16 +115,16 @@ $(document).ready(function(){
             var hash = trans.hash;
             var qty = trans.qty;
 
-            var row="<tr id="+id+"><td>"+hash+"</td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
+            var row="<tr id="+id+"><td><a href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
             $(".transazioni tbody").prepend(row);
-            $('#'+id).css('backgroundColor', '#c5ffc8');
+            $('#'+id).css('backgroundColor', '#FDC600');
             dissolvi(id);
 
           }
         }
 
       });
-  }, 10000);
+  }, 50000);
 
 
 });

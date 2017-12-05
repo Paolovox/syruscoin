@@ -31,3 +31,5 @@ Route::post("/api/send-to","UserController@sentTo");
 
 Route::get('/random',"UserController@randomTransactions");
 Route::get("/getLastTransactions", "UserController@getLastTransactions");
+
+Route::get('/transaction', "UserController@transaction");

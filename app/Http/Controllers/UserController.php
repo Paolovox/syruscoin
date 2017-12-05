@@ -205,4 +205,10 @@ class UserController extends Controller {
 			dd('ciao');
 		}
 
+
+		public function transaction()
+		{
+			return view('pages.transaction');
+		}
+
 }

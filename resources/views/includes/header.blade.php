@@ -36,18 +36,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"><img style="width:68%" src="theme/assets/img/logo.png" alt=""></a>
+            <a class="navbar-brand" href="/"><img style="width:68%" src="theme/assets/img/logo.png" alt=""></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse yamm" id="navigation">
             <div class="button navbar-right">
-                <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('register.html')" data-wow-delay="0.45s"><strong>Accedi</strong></button>
-                <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('submit-property.html')" data-wow-delay="0.48s"><strong>Registrati</strong></button>
+                <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('/')" data-wow-delay="0.45s"><strong>Accedi</strong></button>
+                <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('/)" data-wow-delay="0.48s"><strong>Registrati</strong></button>
             </div>
             <ul class="main-nav nav navbar-nav navbar-left">
                 <li class="dropdown ymm-sw " data-wow-delay="0.1s">
-                    <a href="index.html" class="dropdown-toggle active" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Home </a> <!-- <b class="caret"></b> -->
+                    <a href="/" class="dropdown-toggle active" >Home </a> <!-- <b class="caret"></b> -->
                     <!-- <ul class="dropdown-menu navbar-nav">
                         <li>
                             <a href="index-2.html">Home Style 2</a>
@@ -64,7 +64,7 @@
 
                     </ul> -->
                 </li>
-                <li class="wow fadeInDown" data-wow-delay="0.2s"><a class="" href="#">Transazioni</a></li>
+                <li class="wow fadeInDown" data-wow-delay="0.2s"><a class="" href="/">Transazioni</a></li>
 
 <!--
                 <li class="wow fadeInDown" data-wow-delay="0.2s"><a class="" href="properties.html">Properties</a></li>
