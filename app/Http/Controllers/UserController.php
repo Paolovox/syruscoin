@@ -192,7 +192,7 @@ class UserController extends Controller {
 		$transactions = Transaction::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
 		$output = array();
 		foreach ($transactions as $tran) {
-		//	$tran->delete();
+			$tran->delete();
 			$output[] = $tran->toArray();
 		}
 		return response()->json($output);
