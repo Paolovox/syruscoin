@@ -26,85 +26,85 @@ class UserController extends Controller {
 
 
 	//register new user
-	//TODO decidere se alla creazione riceve già coim
 	public function register(){
 
 		$data = Request::all();
 
-		$user = new User();
-		$user->name = $data['name'];
-		$user->password = sha1($data['password']);
-		$user->email = $data['email'];
+		if(!isset($data['username']) || !isset($data['password'])){
+			die(json_encode(array('status' => 500)));
+		}
 
-		//generate token
-		$user->remember_token = md5(uniqid($user->email.$user->password , true));
+		$username = $data['username'];
+		$password = sha1($data['password']);
+
+		//controllo se l'utente già esiste
+		if($this->userExists($username)){
+			die(json_encode(array('status' => 501)));
+		}
 
 		//create new wallet for user
 		$wallet = $this->multichain->getNewAddress();
-		$user->wallet = $wallet;
-
 		//set permissions [active, send, receive ]
 		$this->multichain->grantCustom($wallet, 'activate,send,receive');
 
-		$user->save();
+		//insert user nello stream USERS e USERS_ADDRESS
+		$this->multichain->publish("users", $username,  bin2hex(json_encode($password)));
+		$this->multichain->publish("users_address", $username,  bin2hex(json_encode($wallet)));
 
-		return $user;
+		//send init syruscoin
+		$this->multichain->sendFromAddress($this->getAdminAddress(), $wallet,  doubleval(env('INIT_COIN')));
+
+		die(json_encode(array('status' => 200)));
 	}
 
 
-	//get username, password
-	//TODO token based auth
+	//login
 	public function login(){
 		$data = Request::all();
 
-		// $user = User::where('email',$data['email'])
-		// 	->where('password',sha1($data['password']))->first();
+		$username = $data['username'];
+		$password = sha1($data['password']);
 
-		$this->getUserCredentials($data['username']);
+		if($this->getUserCredentials($username) === $password){
 
-		//TODO scadenza token
-
-
-		if($user){
-			$user->remember_token = md5(uniqid($user->email.$user->password.rand() , true));
-			$user->save();
-
-			return json_encode(array("token" => $user->remember_token));
-
-		}else{
-			return -1; //TODO autenticazione fallita
+			$token = md5(uniqid($username.$password , true));
+			Request::session()->put($token, array($username, date("Y-m-d H:i:s")));
+			die(json_encode(array('status' => 200)));
 		}
 
+		die(json_encode(array('status' => 500)));
+
+	}
+
+	//controllo se l'utente esiste
+	private function userExists($userName){
+		$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems("users", $userName, true, 1, -1, true);
+		return count($userRecords)>0;
+	}
+
+
+	//get admin address
+	private function getAdminAddress(){
+		$permissionsInfo = $this->multichain->listPermissions("admin");
+		foreach ($permissionsInfo as $permissionItem) {
+			$validationInfo = $this->multichain->validateAddress($permissionItem['address']);
+			if ($validationInfo['ismine']) {
+				return $permissionItem['address'];
+			}
+		}
+		return -1;
 	}
 
 	private function getUserCredentials($userName)
 	{
-		try
-		{
-			$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users2', $userName, true, 1, -1, true);
+			$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users', $userName, true, 1, -1, true);
 
-			if(count($userRecords)>0)
-					{
-							if (is_string($userRecords[0]['data'])) {
-									$contentHex = $userRecords[0]['data'];
-							}
-							else{
-									$contentHex = $this->multichain->setDebug(true)->getTxOutData($userRecords[0]['data']['txid'], $userRecords[0]['data']['vout']);
-							}
-							$contentArr = json_decode(hex2bin($contentHex), true);
-							dd($contentArr);
-							return $contentArr;
-					}
-					else
-					{
-							return false;
-					}
-		}
-		catch (Exception $e)
-		{
-			throw $e;
-		}
-
+			if(count($userRecords)>0){
+					$contentHex = $userRecords[0]['data'];
+					$contentArr = json_decode(hex2bin($contentHex), true);
+					return $contentArr;
+			}
+			return false;
 	}
 
 
