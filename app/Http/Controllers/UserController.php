@@ -57,9 +57,10 @@ class UserController extends Controller {
 	public function login(){
 		$data = Request::all();
 
-		$user = User::where('email',$data['email'])
-			->where('password',sha1($data['password']))->first();
+		// $user = User::where('email',$data['email'])
+		// 	->where('password',sha1($data['password']))->first();
 
+		$this->getUserCredentials($data['username']);
 
 		//TODO scadenza token
 
@@ -72,6 +73,36 @@ class UserController extends Controller {
 
 		}else{
 			return -1; //TODO autenticazione fallita
+		}
+
+	}
+
+	private function getUserCredentials($userName)
+	{
+		try
+		{
+			$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users2', $userName, true, 1, -1, true);
+
+			if(count($userRecords)>0)
+					{
+							if (is_string($userRecords[0]['data'])) {
+									$contentHex = $userRecords[0]['data'];
+							}
+							else{
+									$contentHex = $this->multichain->setDebug(true)->getTxOutData($userRecords[0]['data']['txid'], $userRecords[0]['data']['vout']);
+							}
+							$contentArr = json_decode(hex2bin($contentHex), true);
+							dd($contentArr);
+							return $contentArr;
+					}
+					else
+					{
+							return false;
+					}
+		}
+		catch (Exception $e)
+		{
+			throw $e;
 		}
 
 	}
