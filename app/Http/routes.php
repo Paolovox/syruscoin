@@ -23,13 +23,25 @@ Route::controllers([
 Route::get("/test","UserController@test");
 
 
-Route::post("/api/login","UserController@login");
-Route::post("/api/register","UserController@register");
-Route::post("/api/get-coin-qty","UserController@getCoinQty");
-Route::post("/api/send-to","UserController@sentTo");
+Route::group(['middleware' => ['web']], function () {
+	Route::post("/api/login","UserController@login");
+	Route::post("/api/register","UserController@register");
+	Route::post("/api/get-coin-qty","UserController@getCoinQty");
+	Route::post("/api/send-to","UserController@sentTo");
+	Route::post("/getWallet", "UserController@getWalletAddress");
+
+});
 
 
 Route::get('/random',"UserController@randomTransactions");
 Route::get("/getLastTransactions", "UserController@getLastTransactions");
 
+
+//VIEWVS
 Route::get('/transaction', "UserController@transaction");
+Route::get('/login', function(){
+	return view('pages.login');
+});
+Route::get('/register', function(){
+	return view('pages.register');
+});

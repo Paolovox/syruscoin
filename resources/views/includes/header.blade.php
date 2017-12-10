@@ -42,8 +42,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse yamm" id="navigation">
             <div class="button navbar-right">
-                <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('/')" data-wow-delay="0.45s"><strong>Accedi</strong></button>
-                <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('/)" data-wow-delay="0.48s"><strong>Registrati</strong></button>
+                <button class="navbar-btn nav-button wow bounceInRight login" onclick="location.href='/login';" data-wow-delay="0.45s"><strong>Accedi</strong></button>
+                <button class="navbar-btn nav-button wow fadeInRight" onclick=" location.href='/register';" data-wow-delay="0.48s"><strong>Registrati</strong></button>
             </div>
             <ul class="main-nav nav navbar-nav navbar-left">
                 <li class="dropdown ymm-sw " data-wow-delay="0.1s">

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\User;
 use App\Transaction;
+use Session;
 
 use Request;
 use be\kunstmaan\multichain\MultichainClient;
@@ -22,6 +23,7 @@ class UserController extends Controller {
 	{
 		$this->multichain = new MultichainClient( env('MULTICHAIN_IP_PORT'), env('MULTICHAIN_USERNAME', 'multichainrpc'),  env('MULTICHAIN_PASSWORD'), 3);
 		$this->helper = new MultichainHelper($this->multichain);
+
 	}
 
 
@@ -68,8 +70,11 @@ class UserController extends Controller {
 		if($this->getUserCredentials($username) === $password){
 
 			$token = md5(uniqid($username.$password , true));
+
 			Request::session()->put($token, array($username, date("Y-m-d H:i:s")));
-			die(json_encode(array('status' => 200)));
+			Request::session()->save();
+
+			die(json_encode(array('token' => $token)));
 		}
 
 		die(json_encode(array('status' => 500)));
@@ -108,24 +113,36 @@ class UserController extends Controller {
 	}
 
 
-	//get coint qty by token
-	public function getCoinQty(){
+	//get wallet address
+	public function getWalletAddress(){
 
 		$data = Request::all();
-		$user = User::isValid($data['token']);
 
-		if($user){
-			$wallet = $user->wallet;
+		dd($this->checkToken($data));
 
-			$asset = $this->multichain->getCoinQty($wallet,"syruscoin");
-			if($asset){
-				return $asset['total'][0]['qty'];
-			}else{
-				return "asset non valido";
-			}
-		};
+//		$token = $data['token'];
 
-		return -1; //TODO autenticazione fallita
+		$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users_address', 'username1', true, 1, -1, true);
+		if(count($userRecords)>0){
+				$contentHex = $userRecords[0]['data'];
+				$contentArr = json_decode(hex2bin($contentHex), true);
+				return $contentArr;
+		}
+		return false;
+
+	}
+
+
+	private function checkToken($data){
+		// if(!isset($data['token']) || !Request::session()->has($data['token'])){
+		// 	return false;
+		// }
+
+		return Request::session()->get($data['token']);
+		$token_time = $token_time[1];
+
+		return $token_time;
+
 	}
 
 	//send syruscoin to address
