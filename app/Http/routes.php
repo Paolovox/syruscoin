@@ -27,7 +27,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post("/api/login","UserController@login");
 	Route::post("/api/register","UserController@register");
 	Route::post("/api/get-coin-qty","UserController@getCoinQty");
-	Route::post("/api/send-to","UserController@sentTo");
+	Route::post("/api/send-to","UserController@sendTo");
 	Route::post("/getWallet", "UserController@getWalletAddress");
 	Route::post("/api/get-info", "UserController@getInfo");
 

@@ -97,15 +97,54 @@ class UserController extends Controller {
 			$transazioni = $this->getListTransactionsByAddress($wallet_address);
 
 			return view('pages.admin', array(
+				'info' => 1,
 				'name' => $username,
 				'wallet' => $wallet_address,
-				'balance' => $balance
+				'balance' => $balance,
+				'token' => $data['token']
 				)
 			);
 
 		}else{
 			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
 		};
+
+	}
+
+
+	//send coin to address
+	public function sendTo(){
+
+		$data = Request::all();
+		if($this->checkToken($data)){
+			$data_token = Request::session()->get($data['token']);
+			$username = $data_token[0];
+			$wallet_address = $this->getWalletAddressByUsername($username);
+			$balance = $this->getBalanceByAddress($wallet_address);
+
+			if(empty($data['coins']) || empty($data['username'])){
+				return json_encode(array("status" => 500, "description" => "Inserire username e coins"));
+			}
+
+			$username_destination = $data['username'];
+			$coins = $data['coins'];
+
+			if(!$this->userExists($username_destination)){
+				return json_encode(array("status" => 500, "description" => "L'utente non esiste"));
+			}
+
+			if(doubleval($balance) > 0 && doubleval($coins) > 0){
+				$wallet_address_destination = $this->getWalletAddressByUsername($username_destination);
+				$transaction = $this->multichain->setDebug(true)->sendFromAddress($wallet_address, $wallet_address_destination , doubleval($coins), 'test','test');
+				dd($transaction);
+			}
+
+
+
+		}else{
+			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
+		};
+
 
 	}
 
@@ -196,12 +235,6 @@ class UserController extends Controller {
 		return true;
 	}
 
-	//send coin to address
-	public function sentTo(){
-
-		$data = Request::all();
-
-	}
 
 
 
