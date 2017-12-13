@@ -29,6 +29,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post("/api/get-coin-qty","UserController@getCoinQty");
 	Route::post("/api/send-to","UserController@sentTo");
 	Route::post("/getWallet", "UserController@getWalletAddress");
+	Route::post("/api/get-info", "UserController@getInfo");
+
 
 });
 
@@ -44,4 +46,7 @@ Route::get('/login', function(){
 });
 Route::get('/register', function(){
 	return view('pages.register');
+});
+Route::get('/admin', function(){
+	return view('pages.admin');
 });

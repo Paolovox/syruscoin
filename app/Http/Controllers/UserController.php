@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Transaction;
 use Session;
+use Carbon\Carbon;
+
 
 use Request;
 use be\kunstmaan\multichain\MultichainClient;
@@ -71,13 +73,39 @@ class UserController extends Controller {
 
 			$token = md5(uniqid($username.$password , true));
 
-			Request::session()->put($token, array($username, date("Y-m-d H:i:s")));
+			Request::session()->put($token, array($username,  Carbon::now() ));
 			Request::session()->save();
 
 			die(json_encode(array('token' => $token)));
 		}
 
 		die(json_encode(array('status' => 500)));
+
+	}
+
+
+	public function getInfo(){
+		$data = Request::all();
+
+		if($this->checkToken($data)){
+			$data_token = Request::session()->get($data['token']);
+
+			$username = $data_token[0];
+			$wallet_address = $this->getWalletAddressByUsername($username);
+			$balance = $this->getBalanceByAddress($wallet_address);
+			$transazioni = $this->getListTransactionsByAddress($wallet_address);
+
+			return view('pages.admin', array(
+				'name' => $username,
+				'wallet' => $wallet_address,
+				'balance' => $balance
+				)
+			);
+
+		}else{
+			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
+		};
+
 
 	}
 
@@ -100,6 +128,7 @@ class UserController extends Controller {
 		return -1;
 	}
 
+	//username e password
 	private function getUserCredentials($userName)
 	{
 			$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users', $userName, true, 1, -1, true);
@@ -113,36 +142,57 @@ class UserController extends Controller {
 	}
 
 
-	//get wallet address
-	public function getWalletAddress(){
+	//get wallet address by Username
+	private function getWalletAddressByUsername($username){
 
-		$data = Request::all();
+		if($this->userExists($username)){
 
-		dd($this->checkToken($data));
-
-//		$token = $data['token'];
-
-		$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users_address', 'username1', true, 1, -1, true);
-		if(count($userRecords)>0){
-				$contentHex = $userRecords[0]['data'];
-				$contentArr = json_decode(hex2bin($contentHex), true);
-				return $contentArr;
+			$userRecords = $this->multichain->setDebug(true)->listStreamKeyItems('users_address', $username, true, 1, -1, true);
+			if(count($userRecords)>0){
+					$contentHex = $userRecords[0]['data'];
+					$contentArr = json_decode(hex2bin($contentHex), true);
+					return $contentArr;
+			}
 		}
+
+		return false;
+	}
+
+
+
+	private function getBalanceByAddress($address){
+		$balance = $this->multichain->setDebug(true)->getAddressBalances($address);
+		if($balance && count($balance) > 0){
+			return $balance[0]['qty'];
+		};
 		return false;
 
 	}
 
+	private function getListTransactionsByAddress($address){
+		$transactions = $this->multichain->setDebug(true)->listAddressTransactions($address);
+		return $transactions;
+	}
 
+
+	//controlla l'esistenza del token e la scadenza
 	private function checkToken($data){
-		// if(!isset($data['token']) || !Request::session()->has($data['token'])){
-		// 	return false;
-		// }
 
-		return Request::session()->get($data['token']);
-		$token_time = $token_time[1];
+		if(!isset($data['token']) || !Request::session()->has($data['token'])){
+			return false;
+		}
 
-		return $token_time;
+		$token_data = Request::session()->get($data['token']);
+		$token_time = Carbon::parse($token_data[1]);
+		$diff = Carbon::now()->diffInMinutes($token_time,false);
 
+		if( intval($diff) < -60 ){
+			Request::session()->forget($data['token']);
+			Request::session()->save();
+			return false;
+		};
+
+		return true;
 	}
 
 	//send syruscoin to address
