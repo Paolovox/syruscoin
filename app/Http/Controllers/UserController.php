@@ -84,6 +84,7 @@ class UserController extends Controller {
 	}
 
 
+	//get general info by token
 	public function getInfo(){
 		$data = Request::all();
 
@@ -105,7 +106,6 @@ class UserController extends Controller {
 		}else{
 			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
 		};
-
 
 	}
 
@@ -159,7 +159,7 @@ class UserController extends Controller {
 	}
 
 
-
+	//ritorna i coin by address
 	private function getBalanceByAddress($address){
 		$balance = $this->multichain->setDebug(true)->getAddressBalances($address);
 		if($balance && count($balance) > 0){
@@ -169,6 +169,7 @@ class UserController extends Controller {
 
 	}
 
+	//ritorna ultime 10 transazioni by address
 	private function getListTransactionsByAddress($address){
 		$transactions = $this->multichain->setDebug(true)->listAddressTransactions($address);
 		return $transactions;
@@ -195,41 +196,10 @@ class UserController extends Controller {
 		return true;
 	}
 
-	//send syruscoin to address
+	//send coin to address
 	public function sentTo(){
 
 		$data = Request::all();
-		$user = User::isValid($data['token']);
-
-		if($user){
-			$wallet_destination = $data['address'];
-			$qty = $data['qty'];
-
-			$asset = $this->multichain->getCoinQty($user->wallet,"syruscoin");
-
-			if($asset){
-				if( intval($asset['total'][0]['qty'] ) <= 0 ) return "coin <= 0" ;
-				$result = $this->multichain->sendAssetFrom($user->wallet, $wallet_destination, "syruscoin", intval($qty));
-
-
-				//save transaction
-				$transaction = new Transaction();
-				$transaction->address_from = $user->wallet;
-				$transaction->address_to = $wallet_destination;
-				$transaction->hash = $result;
-				$transaction->asset = "syruscoin";
-				$transaction->qty = intval($qty);
-				$transaction->save();
-
-				return $result;
-			}
-			else{
-				return "asset non valido";
-			}
-		}else{
-			return -1; //TODO autenticazione fallita
-		}
-
 
 	}
 
@@ -239,13 +209,6 @@ class UserController extends Controller {
 		return $this->multichain->listAllAddresses();
 	}
 
-	private function getCoinByAddress($address, $asset){
-		$coin = $this->multichain->getCoinQty($address,$asset);
-		if($coin){
-			return $coin['total'][0]['qty'];
-		}
-		return -1;
-	}
 
 	public function randomTransactions(){
 
@@ -296,12 +259,6 @@ class UserController extends Controller {
 		return response()->json($output);
 	}
 
-
-		public function test(){
-		//	print_r($this->multichain->getInfo());
-			dd($this->getCoinAllAddresses());
-			dd('ciao');
-		}
 
 
 		public function transaction()
