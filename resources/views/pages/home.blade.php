@@ -2,131 +2,168 @@
 @section('content')
 
 <style>
+ .search{
+   background-color: #293641;
+   border: 2px solid #35485a;
+ }
+ .search:focus{
+   background-color: #293641;
+   color:white;
+ }
+ .addon-cerca{
+   background-image:none;
+   border: 2px solid #35485a;
+   background-color: #293641;
+ }
+ .card{
+   background-color: #124050 !important;
+   border-radius: 2% !important;
+   border: 0;
+   margin-left: 3%;
+   width: 13%;
+   text-align: center;
+ }
+ .card-title{
+   font-weight: bold !important;
+    margin-bottom: 0;
+ }
+ h5{
+   font-size: 13px;
+ }
 
-table {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
-    line-height: 28px;
-    color: #777;
-    background: #fff;
-    position: relative;
+ table th{
+   color:white;
+   background-color: #293641;
+   border: 2px solid #35485a;
+
+ }
+ .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: #232322;
 }
-
-table {
-    border-collapse: collapse;
-}
-
-tr:nth-child(n + 8) {
-    display: none;
-}
-
-
 </style>
 
-<?php
-$transactions = \App\Transaction::withTrashed()->whereNotNull('deleted_at')->orderBy('created_at', 'desc')->get();
- ?>
+<div class="row" style="width:100%;margin-top:3%">
 
-<div class="content-area home-area-1 recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 text-left page-title">
-                <h2>Ultime Transazioni</h2>
-
-
-                <table class="transazioni table table-striped table-hover" style="color:#323232">
-                  <thead>
-                    <tr>
-                      <th>Hash</th>
-                      <th>Valore</th>
-                      <th>Data</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($transactions as $tran) { ?>
-                      <tr>
-                        <td><a href="/transaction?id=<?= $tran->id ?>"><?= $tran->hash; ?></a></td>
-                        <td><?= $tran->qty ?> SYC</td>
-                        <td><?= $tran->created_at; ?></td>
-                      </tr>
-                    <?php } ?>
-                  </tbody>
-                </table>
-            </div>
-
-
-            <!-- NEWS -->
-            <div class="col-md-4 text-center  wow fadeInRight text-left page-title">
-                <h2>News</h2>
-                <ul class="footer-blog">
-                    <li>
-                        <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                            <a href="single.html">
-                                <img src="theme/assets/img/logo.png">
-                            </a>
-                            <span class="blg-date">04/12/2017</span>
-
-                        </div>
-                        <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                            <h6> <a href="#">SyrusCoin </a></h6>
-                            <p style="line-height: 17px; padding: 8px 2px;">E' nato il SyrusCoin. </p>
-                        </div>
-                    </li>
-
-
-                </ul>
-            </div>
-        </div>
-
+  <div class="form-group" style="width:70%; margin:0 auto">
+    <label class="sr-only" for="exampleInputAmount">Tx Hash,Address</label>
+    <div class="input-group">
+      <input type="text" class="form-control search" id="exampleInputAmount" placeholder="Tx Hash, Address">
+      <div style="cursor:pointer" class="input-group-addon addon-cerca"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Cerca</div>
     </div>
+  </div>
+
+</div>
+
+
+<div class="row" style="margin-top:3%;width:100%">
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
+      <div class="card-body">
+        <h5 class="card-title">Blocco Corrente</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+      <div class="card-body">
+        <h5 class="card-title">Miners Attivi</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
+      <div class="card-body">
+        <h5 class="card-title">Transazioni</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+      <div class="card-body">
+        <h5 class="card-title">Reward Blocco</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
+      <div class="card-body">
+        <h5 class="card-title">Difficoltà</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+      <div class="card-body">
+        <h5 class="card-title">Tassa</h5>
+        <h5 style="text-align:center" class="card-title"></h5>
+      </div>
+    </div>
+
+</div>
+
+
+<div class="row" style="margin-top:3%;width:100%;margin-left:2%">
+
+  <h1 style="color:white"><i class="fa fa-cubes" aria-hidden="true"></i> Recenti Transazioni</h1> &nbsp;&nbsp; <h4 style="margin-top:1.2%"> le transazioni più recenti avvenute nel Network Syrus</h4>
+
+
+  <table class="table table-hover table-striped table-bordered" style="margin-top:2%;width:94%">
+  <thead>
+    <tr>
+      <th scope="col">Hash Transazione</th>
+      <th scope="col">SyrusCoin</th>
+      <th scope="col">Address</th>
+      <th scope="col">Dimensione</th>
+      <th scope="col">Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-active">
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+  </tbody>
+</table>
 </div>
 
 @stop
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script>
-
-function dissolvi(id){
-  $('#'+id).animate({
-      'opacity': '0.5'
-  }, 1000, function () {
-      $('#'+id).css({
-          'backgroundColor': '#fff',
-          'opacity': '1'
-      });
-  });
-}
-
-$(document).ready(function(){
-
-  window.setInterval(function() {
-      $.get('/getLastTransactions',{},function(data){
-        if(data.length > 0){
-          for(var i=0; i<data.length; i++){
-            var trans = data[i];
-
-            var id = trans.id;
-            var address_from = trans.address_from;
-            var address_to = trans.address_to;
-            var hash = trans.hash;
-            var qty = trans.qty;
-
-            var row="<tr id="+id+"><td><a href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
-            $(".transazioni tbody").prepend(row);
-            $('#'+id).css('backgroundColor', '#FDC600');
-            dissolvi(id);
-
-          }
-        }
-
-      });
-  }, 3000);
-
-
-});
-
-</script>

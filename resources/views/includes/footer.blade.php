@@ -1,16 +1,7 @@
-<div class="footer-copy text-center">
-    <div class="container">
-        <div class="row">
-            <div class="pull-left">
-                <span> (C) <a href="https://www.syrusindustry.com/">SyrusIndustry</a> , All rights reserved 2017  </span>
-            </div>
-            <div class="bottom-menu pull-right">
-                <ul>
-                    <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.2s">Home</a></li>
-                    <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.4s">Faq</a></li>
-                    <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.6s">Contatti</a></li>
-                </ul>
-            </div>
-        </div>
+<footer id="footer" style="margin-top:5%;width:100%;text-align:right">
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Made by <a href="http://thomaspark.co">Syrus Industry</a></p>
     </div>
-</div>
+  </div>
+</footer>

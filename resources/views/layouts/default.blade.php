@@ -3,13 +3,13 @@
     @include('includes.head')
 </head>
 <body>
+  @include('includes.header')
+
 <div class="container">
 
-    <header class="row">
-        @include('includes.header')
-    </header>
 
-    <div id="main" class="row">
+
+    <div id="main" class="row" style="margin-left:1%">
             @yield('content')
     </div>
 
