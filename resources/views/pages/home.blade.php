@@ -40,6 +40,24 @@
  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
    background-color: #232322;
 }
+
+table {
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+    position: relative;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr:nth-child(n + 8) {
+    display: none;
+}
+
 </style>
 
 <div class="row" style="width:100%;margin-top:3%">
