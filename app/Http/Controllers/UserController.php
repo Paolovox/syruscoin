@@ -96,7 +96,7 @@ class UserController extends Controller {
 			$balance = $this->getBalanceByAddress($wallet_address);
 			$transazioni = $this->getListTransactionsByAddress($wallet_address);
 
-			return view('pages.admin', array(
+			return json_encode(array(
 				'info' => 1,
 				'name' => $username,
 				'wallet' => $wallet_address,
@@ -120,8 +120,6 @@ class UserController extends Controller {
 
 		if($this->checkToken($data)){
 
-
-
 			$data_token = Request::session()->get($data['token']);
 
 
@@ -129,11 +127,11 @@ class UserController extends Controller {
 			$wallet_address = $this->getWalletAddressByUsername($username);
 			$balance = $this->getBalanceByAddress($wallet_address);
 
-			if(empty($data['coins']) || empty($data['username'])){
+			if(empty($data['coins']) || empty($data['address'])){
 				return json_encode(array("status" => 500, "description" => "Inserire username e coins"));
 			}
 
-			$username_destination = $data['username'];
+			$username_destination = $data['address'];
 			$coins = $data['coins'];
 
 			if(!$this->userExists($username_destination)){
@@ -148,6 +146,7 @@ class UserController extends Controller {
 			if(doubleval($balance) > 0 && doubleval($coins) > 0 && doubleval($balance) > doubleval($coins)){
 				$wallet_address_destination = $this->getWalletAddressByUsername($username_destination);
 				$transaction = $this->multichain->sendFromAddress($wallet_address, $wallet_address_destination , doubleval($coins));
+				$this->multichain->publish("transactions", Carbon::now()->toDateTimeString() , bin2hex(json_encode($transaction)));
 				return json_encode(array('status' => 200, 'description' => 'Transazione Effettuata', 'txid' => $transaction ));
 			}else{
 				return json_encode(array('status' => 500, 'description' => 'Transazione Non Effettuata'));
@@ -295,8 +294,26 @@ class UserController extends Controller {
 	}
 
 	public function getLastTransactions(){
-		$transactions = $this->multichain->listWalletTransactions();
-		return response()->json($transactions);
+
+		$output = array();
+
+		$transactions_keys = $this->multichain->setDebug(true)->listStreamKeys('transactions', '*', false, 10, -3, true);
+		if($transactions_keys){
+			foreach ($transactions_keys as $tran => $value) {
+				$transaction_key = $value['key'];
+				$transazione = $this->multichain->setDebug(true)->listStreamKeyItems('transactions', $transaction_key, true, 1, -1, true);
+				$contentHex = $transazione[0]['data'];
+				$contentArr = json_decode(hex2bin($contentHex), true);
+
+				$transazione_data = $this->multichain->setDebug(true)->getWalletTransaction($contentArr, false, true);
+
+				$output[$transazione_data['txid']] = array(
+					'coins' => $transazione_data['vout'][0]['amount']
+				);
+			}
+		}
+
+		return response()->json($output);
 	}
 
 
