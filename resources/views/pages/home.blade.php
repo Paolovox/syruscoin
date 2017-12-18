@@ -125,7 +125,7 @@ tr:nth-child(n + 8) {
   <h1 style="color:white"><i class="fa fa-cubes" aria-hidden="true"></i> Recenti Transazioni</h1> &nbsp;&nbsp; <h4 style="margin-top:1.2%"> le transazioni più recenti avvenute nel Network Syrus</h4>
 
 
-  <table class="table table-hover table-striped table-bordered" style="margin-top:2%;width:94%">
+  <table class="transazioni table table-hover table-striped table-bordered" style="margin-top:2%;width:94%">
   <thead>
     <tr>
       <th scope="col">Hash Transazione</th>
@@ -185,3 +185,46 @@ tr:nth-child(n + 8) {
 @stop
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script>
+function dissolvi(id){
+  $('#'+id).animate({
+      'opacity': '0.5'
+  }, 8000, function () {
+      $('#'+id).css({
+          'backgroundColor': '#fff',
+          'opacity': '1'
+      });
+  });
+}
+
+$(document).ready(function(){
+
+  window.setInterval(function() {
+      $.get('/getLastTransactions',{},function(data){
+        if(data.length > 0){
+          for(var i=0; i<data.length; i++){
+            var trans = data[i];
+
+            var id = trans.id;
+            var address_from = trans.address_from;
+            var address_to = trans.address_to;
+            var hash = trans.hash;
+            var qty = trans.qty;
+
+            var row="<tr id="+id+"><td><a href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
+            $(".transazioni tbody").prepend(row);
+            $('#'+id).css('backgroundColor', '#FDC600');
+            dissolvi(id);
+
+          }
+        }
+
+      });
+  }, 3000);
+
+
+});
+
+</script>

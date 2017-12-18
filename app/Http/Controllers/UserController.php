@@ -43,7 +43,7 @@ class UserController extends Controller {
 
 		//controllo se l'utente già esiste
 		if($this->userExists($username)){
-			die(json_encode(array('status' => 501)));
+			die(json_encode(array('status' => 501, 'description' => 'Utente già registrato')));
 		}
 
 		//create new wallet for user
@@ -58,7 +58,7 @@ class UserController extends Controller {
 		//send init syruscoin
 		$this->multichain->sendFromAddress($this->getAdminAddress(), $wallet,  doubleval(env('INIT_COIN')));
 
-		die(json_encode(array('status' => 200)));
+		die(json_encode(array('status' => 200, 'description' => 'Registrazione completata')));
 	}
 
 
@@ -116,8 +116,15 @@ class UserController extends Controller {
 	public function sendTo(){
 
 		$data = Request::all();
+
+
 		if($this->checkToken($data)){
+
+
+
 			$data_token = Request::session()->get($data['token']);
+
+
 			$username = $data_token[0];
 			$wallet_address = $this->getWalletAddressByUsername($username);
 			$balance = $this->getBalanceByAddress($wallet_address);
@@ -133,13 +140,18 @@ class UserController extends Controller {
 				return json_encode(array("status" => 500, "description" => "L'utente non esiste"));
 			}
 
-			if(doubleval($balance) > 0 && doubleval($coins) > 0){
-				$wallet_address_destination = $this->getWalletAddressByUsername($username_destination);
-				$transaction = $this->multichain->setDebug(true)->sendFromAddress($wallet_address, $wallet_address_destination , doubleval($coins), 'test','test');
-				dd($transaction);
+
+			if(doubleval($balance) < doubleval($coins)){
+				return json_encode(array('status' => 500, 'description' => 'I tuoi coins non coprono il prezzo della transazione'));
 			}
 
-
+			if(doubleval($balance) > 0 && doubleval($coins) > 0 && doubleval($balance) > doubleval($coins)){
+				$wallet_address_destination = $this->getWalletAddressByUsername($username_destination);
+				$transaction = $this->multichain->sendFromAddress($wallet_address, $wallet_address_destination , doubleval($coins));
+				return json_encode(array('status' => 200, 'description' => 'Transazione Effettuata', 'txid' => $transaction ));
+			}else{
+				return json_encode(array('status' => 500, 'description' => 'Transazione Non Effettuata'));
+			}
 
 		}else{
 			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
@@ -283,13 +295,8 @@ class UserController extends Controller {
 	}
 
 	public function getLastTransactions(){
-		$transactions = Transaction::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
-		$output = array();
-		foreach ($transactions as $tran) {
-			$tran->delete();
-			$output[] = $tran->toArray();
-		}
-		return response()->json($output);
+		$transactions = $this->multichain->listWalletTransactions();
+		return response()->json($transactions);
 	}
 
 
