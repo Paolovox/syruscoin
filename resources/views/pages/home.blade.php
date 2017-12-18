@@ -215,7 +215,12 @@ $(document).ready(function(){
       var qty = e.coins;
       var data = e.time;
 
-      var row="<tr class='table-active' id="+i+"><td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+      var row="<tr class='table-active' id="+i+"> \
+      <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+      <td>"+qty+" SYC</td> \
+      <td>"+address_to+"</td> \
+      <td>"+e.size+" bytes</td> \
+      <td>"+data+"</td></tr>"
       $(".transazioni tbody").prepend(row);
     })
   })
@@ -248,7 +253,7 @@ $(document).ready(function(){
               <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
               <td>"+qty+" SYC</td> \
               <td>"+address_to+"</td> \
-              <td></td> \
+              <td>"+e.size+" bytes</td> \
               <td>"+data+"</td></tr>"
               $(".transazioni tbody").prepend(row);
               $('#'+i).css('backgroundColor', '#b5bd68');
@@ -264,7 +269,12 @@ $(document).ready(function(){
                 var qty = e.coins;
                 var data = e.time;
 
-                var row="<tr class='table-active' id="+i+"><td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+                var row="<tr class='table-active' id="+i+"> \
+                <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+                <td>"+qty+" SYC</td> \
+                <td>"+address_to+"</td> \
+                <td>"+e.size+" bytes</td> \
+                <td>"+data+"</td></tr>"
                 $(".transazioni tbody").prepend(row);
                 $('#'+i).css('backgroundColor', '#b5bd68');
                 dissolvi(i);
@@ -281,7 +291,7 @@ $(document).ready(function(){
 
   window.setInterval(function() {
       currentBlock();
-  },10000);
+  },5000);
 
 
 });
