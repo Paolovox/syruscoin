@@ -35,6 +35,7 @@
    color:white;
    background-color: #293641;
    border: 2px solid #35485a;
+   text-align: center;
 
  }
  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
@@ -82,7 +83,7 @@ table tr{
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
       <div class="card-body">
         <h5 class="card-title">Blocco Corrente</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title current_block"></h5>
       </div>
     </div>
 
@@ -204,6 +205,8 @@ function dissolvi(id){
 }
 
 $(document).ready(function(){
+    currentBlock();
+
 
   $.get('/getLastTransactions',{},function(data){
     $.each(data, function(i,e){
@@ -274,6 +277,22 @@ $(document).ready(function(){
   },10000);
 
 
+
+
+  window.setInterval(function() {
+      currentBlock();
+  },10000);
+
+
 });
+
+
+function currentBlock(){
+  $.get('/getCurrentBlock',{},function(data){
+    data = JSON.parse(data);
+    var current_block = data.current_block;
+    $('.current_block').html(current_block);
+  });
+}
 
 </script>

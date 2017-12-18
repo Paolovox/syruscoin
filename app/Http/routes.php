@@ -37,6 +37,8 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::get('/random',"UserController@randomTransactions");
 Route::get("/getLastTransactions", "UserController@getLastTransactions");
+Route::get("/getCurrentBlock", "UserController@getCurrentBlock");
+
 
 
 //VIEWVS
