@@ -217,9 +217,9 @@ $(document).ready(function(){
 
       var row="<tr class='table-active' id="+i+"> \
       <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
-      <td>"+qty+" SYC</td> \
+      <td style='text-align:center'>"+qty+" SYC</td> \
       <td>"+address_to+"</td> \
-      <td>"+e.size+" bytes</td> \
+      <td style='text-align:center'>"+e.size+" bytes</td> \
       <td>"+data+"</td></tr>"
       $(".transazioni tbody").prepend(row);
     })
@@ -271,9 +271,9 @@ $(document).ready(function(){
 
                 var row="<tr class='table-active' id="+i+"> \
                 <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
-                <td>"+qty+" SYC</td> \
+                <td style='text-align:center'>"+qty+" SYC</td> \
                 <td>"+address_to+"</td> \
-                <td>"+e.size+" bytes</td> \
+                <td style='text-align:center'>"+e.size+" bytes</td> \
                 <td>"+data+"</td></tr>"
                 $(".transazioni tbody").prepend(row);
                 $('#'+i).css('backgroundColor', '#b5bd68');
