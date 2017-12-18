@@ -44,7 +44,7 @@ table {
     font-weight: 300;
     padding: 0;
     margin: 0;
-    font-size: 11px;
+    font-size: 10px;
     line-height: 18px;
     position: relative;
 }
@@ -126,7 +126,7 @@ table tr{
 
 <div class="row" style="margin-top:3%;width:100%;margin-left:2%">
 
-  <h1 style="color:white"><i class="fa fa-cubes" aria-hidden="true"></i> Recenti Transazioni</h1> &nbsp;&nbsp; <h4 style="margin-top:1.2%"> le transazioni più recenti avvenute nel Network Syrus</h4>
+  <h1 style="color:white"><i class="fa fa-cubes" aria-hidden="true"></i> Transazioni Recenti</h1> &nbsp;&nbsp; <h4 style="margin-top:1.2%"> le transazioni più recenti avvenute nel Network Syrus</h4>
 
 
   <table class="transazioni table table-hover table-bordered" style="margin-top:2%;width:94%">
@@ -195,7 +195,7 @@ table tr{
 function dissolvi(id){
   $('#'+id).animate({
       'opacity': '0.5'
-  }, 5000, function () {
+  }, 2000, function () {
       $('#'+id).css({
           'backgroundColor': 'rgba(255,255,255,0.075)',
           'opacity': '1'
@@ -206,25 +206,55 @@ function dissolvi(id){
 $(document).ready(function(){
 
   window.setInterval(function() {
+
       $.get('/getLastTransactions',{},function(data){
 
           $.each(data, function(i,e){
-            var address_to = e.address;
-            var hash = i;
-            var qty = e.coins;
-            var data = e.time;
 
-            var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
-            $(".transazioni tbody").prepend(row);
-            $('#'+i).css('backgroundColor', '#cc6666');
-            dissolvi(i);
+            var exists = false;
+
+            $('.transazioni tbody tr').each(function(id,etr){
+              var row = $(this);
+              var row_id = row.prop('id');
+
+              if(row_id == i){
+                exists = true;
+              }
+
+            })
+
+            if(exists == false){
+              var address_to = e.address;
+              var hash = i;
+              var qty = e.coins;
+              var data = e.time;
+
+              var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+              $(".transazioni tbody").prepend(row);
+              $('#'+i).css('backgroundColor', '#cc6666');
+              dissolvi(i);
+            }
+
+
+            if($('.transazioni tbody tr').length == 0){
+
+              $.each(data, function(i,e){
+                var address_to = e.address;
+                var hash = i;
+                var qty = e.coins;
+                var data = e.time;
+
+                var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+                $(".transazioni tbody").prepend(row);
+                $('#'+i).css('backgroundColor', '#cc6666');
+                dissolvi(i);
+              })
+            }
 
           })
 
-
-
       });
-  },20000);
+  },10000);
 
 
 });
