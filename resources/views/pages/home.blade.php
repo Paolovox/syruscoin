@@ -205,6 +205,18 @@ function dissolvi(id){
 
 $(document).ready(function(){
 
+  $.get('/getLastTransactions',{},function(data){
+    $.each(data, function(i,e){
+      var address_to = e.address;
+      var hash = i;
+      var qty = e.coins;
+      var data = e.time;
+
+      var row="<tr class='table-active' id="+i+"><td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+      $(".transazioni tbody").prepend(row);
+    })
+  })
+
   window.setInterval(function() {
 
       $.get('/getLastTransactions',{},function(data){
@@ -229,9 +241,14 @@ $(document).ready(function(){
               var qty = e.coins;
               var data = e.time;
 
-              var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+              var row="<tr class='table-active' id="+i+"> \
+              <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+              <td>"+qty+" SYC</td> \
+              <td>"+address_to+"</td> \
+              <td></td> \
+              <td>"+data+"</td></tr>"
               $(".transazioni tbody").prepend(row);
-              $('#'+i).css('backgroundColor', '#cc6666');
+              $('#'+i).css('backgroundColor', '#b5bd68');
               dissolvi(i);
             }
 
@@ -244,9 +261,9 @@ $(document).ready(function(){
                 var qty = e.coins;
                 var data = e.time;
 
-                var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
+                var row="<tr class='table-active' id="+i+"><td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
                 $(".transazioni tbody").prepend(row);
-                $('#'+i).css('backgroundColor', '#cc6666');
+                $('#'+i).css('backgroundColor', '#b5bd68');
                 dissolvi(i);
               })
             }

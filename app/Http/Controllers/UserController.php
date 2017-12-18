@@ -297,7 +297,7 @@ class UserController extends Controller {
 
 		$output = array();
 
-		$transactions_keys = $this->multichain->setDebug(true)->listStreamKeys('transactions', '*', false, 10, -3, true);
+		$transactions_keys = $this->multichain->setDebug(true)->listStreamKeys('transactions', '*', false, 10, -10, true);
 		if($transactions_keys){
 			foreach ($transactions_keys as $tran => $value) {
 				$transaction_key = $value['key'];
@@ -308,7 +308,7 @@ class UserController extends Controller {
 				$transazione_data = $this->multichain->setDebug(true)->getWalletTransaction($contentArr, false, true);
 
 				// dump($transazione_data);
-				
+
 				$output[$transazione_data['txid']] = array(
 					'coins' => $transazione_data['vout'][0]['amount'],
 					'address' => $transazione_data['vout'][0]['addresses'][0],
