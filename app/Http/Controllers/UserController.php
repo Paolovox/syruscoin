@@ -94,14 +94,38 @@ class UserController extends Controller {
 			$username = $data_token[0];
 			$wallet_address = $this->getWalletAddressByUsername($username);
 			$balance = $this->getBalanceByAddress($wallet_address);
-			$transazioni = $this->getListTransactionsByAddress($wallet_address);
+
+			if(!isset($data['page'])){
+				$page = 1;
+			}else{
+				$page = $data['page'];
+			}
+
+			$output = array();
+			$transazioni = $this->getListTransactionsByAddress($wallet_address, $page);
+			if(count($transazioni) > 0){
+				foreach ($transazioni as $transazione) {
+
+					if(count($transazione['items']) > 0) continue; //non è una transazione di coins
+
+					$output[Carbon::createFromTimestamp($transazione['timereceived'])->toDateTimeString()] = array(
+						'txid' => $transazione['txid'],
+						'coins' => $transazione['vout'][0]['amount'],
+						'address' => $transazione['vout'][0]['addresses'][0],
+						'time' => Carbon::createFromTimestamp($transazione['timereceived'])->toDateTimeString(),
+						'size' => mb_strlen(hex2bin($transazione['hex']))
+					);
+				}
+			}
+
+			krsort($output);
 
 			return json_encode(array(
-				'info' => 1,
-				'name' => $username,
-				'wallet' => $wallet_address,
+				'username' => $username,
+				'wallet_address' => $wallet_address,
 				'balance' => $balance,
-				'token' => $data['token']
+				'token' => $data['token'],
+				'transactions' => $output
 				)
 			);
 
@@ -219,9 +243,12 @@ class UserController extends Controller {
 
 	}
 
-	//ritorna ultime 10 transazioni by address
-	private function getListTransactionsByAddress($address){
-		$transactions = $this->multichain->setDebug(true)->listAddressTransactions($address);
+	//ritorna transazioni by address e page
+	private function getListTransactionsByAddress($address, $page){
+		if($page <= 0){
+			return false;
+		}
+		$transactions = $this->multichain->setDebug(true)->listAddressTransactions($address,10, ($page-1)*10 ,true);
 		return $transactions;
 	}
 
@@ -317,6 +344,14 @@ class UserController extends Controller {
 		}
 
 		return response()->json($output);
+	}
+
+
+
+
+	public function countTransactions(){
+		$transactions = $this->multichain->listStreamKeysCustom('transactions');
+		die( json_encode(array( 'count' => count($transactions))));
 	}
 
 

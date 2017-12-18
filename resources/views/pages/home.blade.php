@@ -97,7 +97,7 @@ table tr{
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
       <div class="card-body">
         <h5 class="card-title">Transazioni</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title count_transactions"></h5>
       </div>
     </div>
 
@@ -206,24 +206,9 @@ function dissolvi(id){
 
 $(document).ready(function(){
     currentBlock();
+    listTransaction();
+    countTransactions();
 
-
-  $.get('/getLastTransactions',{},function(data){
-    $.each(data, function(i,e){
-      var address_to = e.address;
-      var hash = i;
-      var qty = e.coins;
-      var data = e.time;
-
-      var row="<tr class='table-active' id="+i+"> \
-      <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
-      <td style='text-align:center'>"+qty+" SYC</td> \
-      <td>"+address_to+"</td> \
-      <td style='text-align:center'>"+e.size+" bytes</td> \
-      <td>"+data+"</td></tr>"
-      $(".transazioni tbody").prepend(row);
-    })
-  })
 
   window.setInterval(function() {
 
@@ -284,14 +269,13 @@ $(document).ready(function(){
           })
 
       });
+
+      currentBlock();
+      countTransactions();
+
   },10000);
 
 
-
-
-  window.setInterval(function() {
-      currentBlock();
-  },5000);
 
 
 });
@@ -303,6 +287,33 @@ function currentBlock(){
     var current_block = data.current_block;
     $('.current_block').html(current_block);
   });
+}
+
+function listTransaction(){
+  $.get('/getLastTransactions',{},function(data){
+    $.each(data, function(i,e){
+      var address_to = e.address;
+      var hash = i;
+      var qty = e.coins;
+      var data = e.time;
+
+      var row="<tr class='table-active' id="+i+"> \
+      <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+      <td style='text-align:center'>"+qty+" SYC</td> \
+      <td>"+address_to+"</td> \
+      <td style='text-align:center'>"+e.size+" bytes</td> \
+      <td>"+data+"</td></tr>"
+      $(".transazioni tbody").prepend(row);
+    })
+  })
+}
+
+function countTransactions(){
+  $.get('/countTransactions',{},function(data){
+    data = JSON.parse(data);
+    var count = data.count;
+    $('.count_transactions').html(count);
+  })
 }
 
 </script>

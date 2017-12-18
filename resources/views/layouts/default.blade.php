@@ -2,10 +2,11 @@
 <head>
     @include('includes.head')
 </head>
+
 <body>
   @include('includes.header')
 
-<div class="container">
+<div class="container" style="min-height:100%;">
 
 
 
