@@ -307,8 +307,12 @@ class UserController extends Controller {
 
 				$transazione_data = $this->multichain->setDebug(true)->getWalletTransaction($contentArr, false, true);
 
+				// dump($transazione_data);
+				
 				$output[$transazione_data['txid']] = array(
-					'coins' => $transazione_data['vout'][0]['amount']
+					'coins' => $transazione_data['vout'][0]['amount'],
+					'address' => $transazione_data['vout'][0]['addresses'][0],
+					'time' => Carbon::createFromTimestamp($transazione_data['timereceived'])->toDateTimeString()
 				);
 			}
 		}

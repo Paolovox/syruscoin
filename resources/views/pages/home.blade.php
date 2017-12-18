@@ -38,14 +38,13 @@
 
  }
  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-   background-color: #232322;
 }
 
 table {
     font-weight: 300;
     padding: 0;
     margin: 0;
-    font-size: 14px;
+    font-size: 11px;
     line-height: 18px;
     position: relative;
 }
@@ -56,6 +55,11 @@ table {
 
 tr:nth-child(n + 8) {
     display: none;
+}
+
+table tr{
+  font-weight: bold;
+  color: #c0ecfe;
 }
 
 </style>
@@ -125,7 +129,7 @@ tr:nth-child(n + 8) {
   <h1 style="color:white"><i class="fa fa-cubes" aria-hidden="true"></i> Recenti Transazioni</h1> &nbsp;&nbsp; <h4 style="margin-top:1.2%"> le transazioni più recenti avvenute nel Network Syrus</h4>
 
 
-  <table class="transazioni table table-hover table-striped table-bordered" style="margin-top:2%;width:94%">
+  <table class="transazioni table table-hover table-bordered" style="margin-top:2%;width:94%">
   <thead>
     <tr>
       <th scope="col">Hash Transazione</th>
@@ -136,7 +140,7 @@ tr:nth-child(n + 8) {
     </tr>
   </thead>
   <tbody>
-    <tr class="table-active">
+    <!-- <tr class="table-active">
       <td>Column content</td>
       <td>Column content</td>
       <td>Column content</td>
@@ -177,7 +181,7 @@ tr:nth-child(n + 8) {
       <td>Column content</td>
       <td>Column content</td>
       <td>Column content</td>
-    </tr>
+    </tr> -->
   </tbody>
 </table>
 </div>
@@ -191,9 +195,9 @@ tr:nth-child(n + 8) {
 function dissolvi(id){
   $('#'+id).animate({
       'opacity': '0.5'
-  }, 8000, function () {
+  }, 5000, function () {
       $('#'+id).css({
-          'backgroundColor': '#fff',
+          'backgroundColor': 'rgba(255,255,255,0.075)',
           'opacity': '1'
       });
   });
@@ -203,26 +207,24 @@ $(document).ready(function(){
 
   window.setInterval(function() {
       $.get('/getLastTransactions',{},function(data){
-        if(data.length > 0){
-          for(var i=0; i<data.length; i++){
-            var trans = data[i];
 
-            var id = trans.id;
-            var address_from = trans.address_from;
-            var address_to = trans.address_to;
-            var hash = trans.hash;
-            var qty = trans.qty;
+          $.each(data, function(i,e){
+            var address_to = e.address;
+            var hash = i;
+            var qty = e.coins;
+            var data = e.time;
 
-            var row="<tr id="+id+"><td><a href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>2017-12-04 22:04:20</td></tr>"
+            var row="<tr class='table-active' id="+i+"><td><a style='color:#c0ecfe' href=''>"+hash+"</a></td><td>"+qty+" SYC</td><td>"+address_to+"</td><td></td><td>"+data+"</td></tr>"
             $(".transazioni tbody").prepend(row);
-            $('#'+id).css('backgroundColor', '#FDC600');
-            dissolvi(id);
+            $('#'+i).css('backgroundColor', '#cc6666');
+            dissolvi(i);
 
-          }
-        }
+          })
+
+
 
       });
-  }, 3000);
+  },20000);
 
 
 });
