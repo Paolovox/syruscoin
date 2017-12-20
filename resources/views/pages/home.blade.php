@@ -104,21 +104,21 @@ table tr{
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
       <div class="card-body">
         <h5 class="card-title">Reward Blocco</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title"></h5>
       </div>
     </div>
 
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
       <div class="card-body">
         <h5 class="card-title">Difficoltà</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title current_difficulty"></h5>
       </div>
     </div>
 
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
       <div class="card-body">
         <h5 class="card-title">Tassa</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title"></h5>
       </div>
     </div>
 
@@ -173,6 +173,7 @@ function dissolvi(id){
 
 $(document).ready(function(){
     currentBlock();
+    currentDifficulty();
     listTransaction();
     countTransactions();
 
@@ -240,6 +241,7 @@ $(document).ready(function(){
       });
 
       currentBlock();
+      currentDifficulty();
       countTransactions();
       randomTransactions();
 
@@ -256,6 +258,14 @@ function currentBlock(){
     data = JSON.parse(data);
     var current_block = data.current_block;
     $('.current_block').html(current_block);
+  });
+}
+
+function currentDifficulty(){
+  $.get('/getCurrentDifficulty',{},function(data){
+    data = JSON.parse(data);
+    var current_difficulty = data.current_difficulty;
+    $('.current_difficulty').html(current_difficulty);
   });
 }
 

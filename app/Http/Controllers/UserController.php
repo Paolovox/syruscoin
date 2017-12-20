@@ -387,8 +387,12 @@ class UserController extends Controller {
 	public function getCurrentBlock(){
 		$current_block = $this->multichain->setDebug(true)->getblockchaininfo();
 		die(json_encode(array('current_block' => $current_block['blocks'])));
+	}
 
 
+	public function getCurrentDifficulty(){
+		$current_block = $this->multichain->setDebug(true)->getblockchaininfo();
+		die(json_encode(array('current_difficulty' => ( doubleval($current_block['difficulty']) * 100 ).'%')));
 	}
 
 	//render transaction
