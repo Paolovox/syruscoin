@@ -301,7 +301,6 @@ class UserController extends Controller {
 	public function randomTransactions(){
 
 		$addresses = $this->listAddresses();
-		dump($addresses);
 		$n_addressess = count($addresses);
 
 		$from_address = rand(0,$n_addressess-1);
@@ -310,29 +309,17 @@ class UserController extends Controller {
 		$from_address = $addresses[$from_address]['address'];
 		$to_address = $addresses[$to_address]['address'];
 
-		dump($from_address);
-		dump($to_address);
 
 		if($from_address == $to_address) return false;
 
-		$coin = $this->getCoinByAddress($from_address,"syruscoin");
-		dump("coins address from = ".$coin);
-		if(intval($coin) > 0){
+		$coin = $this->getBalanceByAddress($from_address);
+		if(doubleval($coin) > 0){
 			$randomCoin = rand(0, 30) / 10;
 
-			dump("random coins = ".$randomCoin);
 			if($coin > doubleval($randomCoin) && doubleval($randomCoin) > 0){
-				$hash = $this->multichain->sendAssetFrom($from_address, $to_address, "syruscoin", intval($randomCoin));
-				//save transaction
-				$transaction = new Transaction();
-				$transaction->address_from = $from_address;
-				$transaction->address_to = $to_address;
-				$transaction->hash = $hash;
-				$transaction->asset = "syruscoin";
-				$transaction->qty = intval($randomCoin);
-				$transaction->save();
+				$transaction = $this->multichain->sendFromAddress($from_address, $to_address, doubleval($randomCoin));
+				$this->multichain->publish("transactions", Carbon::now()->toDateTimeString() , bin2hex(json_encode($transaction)));
 
-				dump($hash);
 			}
 		}
 	}
