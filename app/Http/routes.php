@@ -44,6 +44,8 @@ Route::get("/countTransactions", "UserController@countTransactions");
 
 //VIEWVS
 Route::get('/transaction', "UserController@transaction");
+Route::get('/search', "UserController@search");
+
 
 Route::get('/login', function(){
 	return view('pages.login');

@@ -70,8 +70,8 @@ table tr{
   <div class="form-group" style="width:70%; margin:0 auto">
     <label class="sr-only" for="exampleInputAmount">Tx Hash,Address</label>
     <div class="input-group">
-      <input type="text" class="form-control search" id="exampleInputAmount" placeholder="Cerca per hash transazione o address">
-      <div style="cursor:pointer" class="input-group-addon addon-cerca"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Cerca</div>
+      <input type="text" class="form-control search" id="search" placeholder="Cerca per hash transazione o address">
+      <div style="cursor:pointer" onclick="search()" class="input-group-addon addon-cerca"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Cerca</div>
     </div>
   </div>
 
@@ -152,6 +152,13 @@ table tr{
 
 
 <script>
+
+
+function search(){
+  var term = $('#search').val();
+  window.location.href = "/search?src="+term;
+}
+
 function dissolvi(id){
   $('#'+id).animate({
       'opacity': '0.5'

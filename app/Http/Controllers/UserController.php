@@ -358,6 +358,32 @@ class UserController extends Controller {
 	}
 
 
+	private function checkIfExistsTransaction($hash){
+		$transactions = $this->multichain->listStreamKeysCustom('transactions');
+		if($transactions){
+			foreach ($transactions as $tran => $value) {
+				$transaction_key = $value['key'];
+				$transazione = $this->multichain->setDebug(true)->listStreamKeyItems('transactions', $transaction_key, true, 1, -1, true);
+				$contentHex = $transazione[0]['data'];
+				$contentArr = json_decode(hex2bin($contentHex), true);
+				if($contentArr == $hash) return true;
+			}
+		}
+		return false;
+	}
+
+
+	private function checkIfExistsAddress($hash){
+		$addresses = $this->multichain->listAllAddresses();
+		if($addresses){
+			foreach ($addresses as $address) {
+				if($address['address'] == $hash) return true;
+			}
+		}
+		return false;
+	}
+
+
 	public function getCurrentBlock(){
 		$current_block = $this->multichain->setDebug(true)->getblockchaininfo();
 		die(json_encode(array('current_block' => $current_block['blocks'])));
@@ -367,12 +393,50 @@ class UserController extends Controller {
 
 	//render transaction
 	public function transaction(){
+		$data = Request::all();
 		$input = array();
+
+		if(!isset($data['tx']) || empty($data['tx'])){
+			return view('pages.home', $input);
+		}
+
 		//check if transaction exists
+		if($this->checkIfExistsTransaction($data['tx'])){
+
+			return view('pages.transaction', $input);
+
+		}else{
+
+			return view('pages.home', $input);
+
+		}
 
 		//se esiste prelevo tutti i parametri per la view
 
-		return view('pages.transaction', $input);
+	}
+
+
+
+	//render transaction
+	public function search(){
+		$data = Request::all();
+		$input = array();
+
+		if(!isset($data['src']) || empty($data['src'])){
+			return view('pages.home', $input);
+		}
+
+		//check if transaction exists
+		if($this->checkIfExistsTransaction($data['src'])){
+
+
+			return view('pages.transaction', $input);
+		}elseif($this->checkIfExistsAddress($data['src'])) { //che if address exists
+			return view('pages.address', $input);
+		}else{
+			return view('pages.home', $input);
+		}
+
 	}
 
 }
