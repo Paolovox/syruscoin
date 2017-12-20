@@ -365,10 +365,14 @@ class UserController extends Controller {
 
 	}
 
+	//render transaction
+	public function transaction(){
+		$input = array();
+		//check if transaction exists
 
-		public function transaction()
-		{
-			return view('pages.transaction');
-		}
+		//se esiste prelevo tutti i parametri per la view
+
+		return view('pages.transaction', $input);
+	}
 
 }

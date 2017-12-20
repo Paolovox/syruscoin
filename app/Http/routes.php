@@ -31,9 +31,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post("/getWallet", "UserController@getWalletAddress");
 	Route::post("/api/get-info", "UserController@getInfo");
 	Route::post("/api/get-my-transactions", "UserController@getMytransactions");
-
-
-
 });
 
 
@@ -47,6 +44,7 @@ Route::get("/countTransactions", "UserController@countTransactions");
 
 //VIEWVS
 Route::get('/transaction', "UserController@transaction");
+
 Route::get('/login', function(){
 	return view('pages.login');
 });

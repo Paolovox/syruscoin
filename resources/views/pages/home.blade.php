@@ -70,7 +70,7 @@ table tr{
   <div class="form-group" style="width:70%; margin:0 auto">
     <label class="sr-only" for="exampleInputAmount">Tx Hash,Address</label>
     <div class="input-group">
-      <input type="text" class="form-control search" id="exampleInputAmount" placeholder="Tx Hash, Address">
+      <input type="text" class="form-control search" id="exampleInputAmount" placeholder="Cerca per hash transazione o address">
       <div style="cursor:pointer" class="input-group-addon addon-cerca"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Cerca</div>
     </div>
   </div>
@@ -141,48 +141,7 @@ table tr{
     </tr>
   </thead>
   <tbody>
-    <!-- <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-active">
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr> -->
+
   </tbody>
 </table>
 </div>
@@ -236,7 +195,7 @@ $(document).ready(function(){
               var data = e.time;
 
               var row="<tr class='table-active' id="+i+"> \
-              <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+              <td><a style='color:#76e5a9;text-decoration: underline' href='/transaction?tx="+hash+"'>"+hash+"</a></td> \
               <td style='text-align:center'>"+qty+" SYC</td> \
               <td>"+address_to+"</td> \
               <td style='text-align:center'>"+e.size+" bytes</td> \
@@ -258,7 +217,7 @@ $(document).ready(function(){
                 var data = e.time;
 
                 var row="<tr class='table-active' id="+i+"> \
-                <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+                <td><a style='color:#76e5a9;text-decoration: underline' href='/transaction?tx="+hash+"'>"+hash+"</a></td> \
                 <td style='text-align:center'>"+qty+" SYC</td> \
                 <td>"+address_to+"</td> \
                 <td style='text-align:center'>"+e.size+" bytes</td> \
@@ -277,7 +236,7 @@ $(document).ready(function(){
       countTransactions();
       randomTransactions();
 
-  },1500);
+  },30000);
 
 
 
@@ -302,7 +261,7 @@ function listTransaction(){
       var data = e.time;
 
       var row="<tr class='table-active' id="+i+"> \
-      <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
+      <td><a style='color:#76e5a9;text-decoration: underline' href='/transaction?tx="+hash+"'>"+hash+"</a></td> \
       <td style='text-align:center'>"+qty+" SYC</td> \
       <td>"+address_to+"</td> \
       <td style='text-align:center'>"+e.size+" bytes</td> \
