@@ -219,6 +219,20 @@ class UserController extends Controller {
 		return -1;
 	}
 
+	//get all miners
+	private function getAllMiners(){
+		$output = array();
+		$permissionsInfo = $this->multichain->listPermissions("mine");
+		foreach ($permissionsInfo as $permissionItem) {
+			$validationInfo = $this->multichain->validateAddress($permissionItem['address']);
+			$output[] = $permissionItem;
+			// if ($validationInfo['ismine']) {
+			// 	return $permissionItem['address'];
+			// }
+		}
+		return $output;
+	}
+
 	//username e password
 	private function getUserCredentials($userName)
 	{
@@ -355,6 +369,10 @@ class UserController extends Controller {
 	public function countTransactions(){
 		$transactions = $this->multichain->listStreamKeysCustom('transactions');
 		die( json_encode(array( 'count' => count($transactions))));
+	}
+
+	public function countMiners(){
+		die( json_encode(array( 'count' => count($this->getAllMiners()))));
 	}
 
 

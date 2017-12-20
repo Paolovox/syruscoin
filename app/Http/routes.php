@@ -39,6 +39,8 @@ Route::get("/getLastTransactions", "UserController@getLastTransactions");
 Route::get("/getCurrentBlock", "UserController@getCurrentBlock");
 Route::get("/getCurrentDifficulty", "UserController@getCurrentDifficulty");
 Route::get("/countTransactions", "UserController@countTransactions");
+Route::get("/countMiners", "UserController@countMiners");
+
 
 
 

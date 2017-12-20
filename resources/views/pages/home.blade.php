@@ -90,7 +90,7 @@ table tr{
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
       <div class="card-body">
         <h5 class="card-title">Miners Attivi</h5>
-        <h5 style="text-align:center" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9" class="card-title count_miners"></h5>
       </div>
     </div>
 
@@ -176,6 +176,7 @@ $(document).ready(function(){
     currentDifficulty();
     listTransaction();
     countTransactions();
+    countMiners();
 
 
   window.setInterval(function() {
@@ -241,6 +242,7 @@ $(document).ready(function(){
       });
 
       currentBlock();
+      countMiners();
       currentDifficulty();
       countTransactions();
       randomTransactions();
@@ -293,6 +295,14 @@ function countTransactions(){
     data = JSON.parse(data);
     var count = data.count;
     $('.count_transactions').html(count);
+  })
+}
+
+function countMiners(){
+  $.get('/countMiners',{},function(data){
+    data = JSON.parse(data);
+    var count = data.count;
+    $('.count_miners').html(count);
   })
 }
 
