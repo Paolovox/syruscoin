@@ -95,6 +95,28 @@ class UserController extends Controller {
 			$wallet_address = $this->getWalletAddressByUsername($username);
 			$balance = $this->getBalanceByAddress($wallet_address);
 
+			return json_encode(array(
+				'username' => $username,
+				'wallet_address' => $wallet_address,
+				'balance' => $balance,
+				'token' => $data['token'],
+				)
+			);
+
+		}else{
+			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
+		};
+
+	}
+
+	//get transazioni in entrata e uscita
+	public function getMytransactions(){
+		$data = Request::all();
+
+		if($this->checkToken($data)){
+			$data_token = Request::session()->get($data['token']);
+			$username = $data_token[0];
+			$wallet_address = $this->getWalletAddressByUsername($username);
 			if(!isset($data['page'])){
 				$page = 1;
 			}else{
@@ -110,8 +132,8 @@ class UserController extends Controller {
 
 					$output[Carbon::createFromTimestamp($transazione['timereceived'])->toDateTimeString()] = array(
 						'txid' => $transazione['txid'],
-						'coins' => $transazione['vout'][0]['amount'],
-						'address' => $transazione['vout'][0]['addresses'][0],
+						'coins' => $transazione['balance']['amount'],
+						'address' => $transazione['addresses'][0],
 						'time' => Carbon::createFromTimestamp($transazione['timereceived'])->toDateTimeString(),
 						'size' => mb_strlen(hex2bin($transazione['hex']))
 					);
@@ -119,19 +141,14 @@ class UserController extends Controller {
 			}
 
 			krsort($output);
-
 			return json_encode(array(
-				'username' => $username,
-				'wallet_address' => $wallet_address,
-				'balance' => $balance,
-				'token' => $data['token'],
 				'transactions' => $output
 				)
 			);
 
 		}else{
 			return json_encode(array('status' => 500, 'description' => 'token scaduto'));
-		};
+		}
 
 	}
 
@@ -361,7 +378,6 @@ class UserController extends Controller {
 
 
 	}
-
 
 
 		public function transaction()

@@ -30,6 +30,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::post("/api/send-to","UserController@sendTo");
 	Route::post("/getWallet", "UserController@getWalletAddress");
 	Route::post("/api/get-info", "UserController@getInfo");
+	Route::post("/api/get-my-transactions", "UserController@getMytransactions");
+
 
 
 });
