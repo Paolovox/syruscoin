@@ -319,7 +319,6 @@ class UserController extends Controller {
 			if($coin > doubleval($randomCoin) && doubleval($randomCoin) > 0){
 				$transaction = $this->multichain->sendFromAddress($from_address, $to_address, doubleval($randomCoin));
 				$this->multichain->publish("transactions", Carbon::now()->toDateTimeString() , bin2hex(json_encode($transaction)));
-
 			}
 		}
 	}

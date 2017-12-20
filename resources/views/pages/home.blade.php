@@ -60,7 +60,7 @@ tr:nth-child(n + 8) {
 
 table tr{
   font-weight: bold;
-  color: #c0ecfe;
+  color: #9ee3ff;
 }
 
 </style>
@@ -196,9 +196,10 @@ table tr{
 function dissolvi(id){
   $('#'+id).animate({
       'opacity': '0.5'
-  }, 2000, function () {
+  }, 3000, function () {
       $('#'+id).css({
           'backgroundColor': 'rgba(255,255,255,0.075)',
+          'color': '#9ee3ff',
           'opacity': '1'
       });
   });
@@ -236,12 +237,14 @@ $(document).ready(function(){
 
               var row="<tr class='table-active' id="+i+"> \
               <td><a style='color:#76e5a9;text-decoration: underline' href=''>"+hash+"</a></td> \
-              <td>"+qty+" SYC</td> \
+              <td style='text-align:center'>"+qty+" SYC</td> \
               <td>"+address_to+"</td> \
-              <td>"+e.size+" bytes</td> \
+              <td style='text-align:center'>"+e.size+" bytes</td> \
               <td>"+data+"</td></tr>"
               $(".transazioni tbody").prepend(row);
-              $('#'+i).css('backgroundColor', '#b5bd68');
+              $('#'+i).css('backgroundColor', 'black');
+              $('#'+i).css('color', 'red');
+
               dissolvi(i);
             }
 
@@ -272,8 +275,9 @@ $(document).ready(function(){
 
       currentBlock();
       countTransactions();
+      randomTransactions();
 
-  },10000);
+  },1500);
 
 
 
@@ -315,5 +319,8 @@ function countTransactions(){
     $('.count_transactions').html(count);
   })
 }
+
+
+function randomTransactions(){ $.get('/random',{},function(data){}) }
 
 </script>
