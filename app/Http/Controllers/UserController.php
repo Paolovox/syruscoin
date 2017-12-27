@@ -109,7 +109,7 @@ class UserController extends Controller {
 
 	}
 
-	//get transazioni in entrata e uscita
+	//get transazioni in entrata e uscita (in - out)
 	public function getMytransactions(){
 		$data = Request::all();
 
@@ -123,12 +123,24 @@ class UserController extends Controller {
 				$page = $data['page'];
 			}
 
+			if(!isset($data['in']) && !isset($data['out']) && !isset($data['all'])){
+				return json_encode(array("error" => "Specificare i parametri 'in', 'out' o 'all'",));
+			}
+
 			$output = array();
 			$transazioni = $this->getListTransactionsByAddress($wallet_address, $page);
 			if(count($transazioni) > 0){
 				foreach ($transazioni as $transazione) {
 
 					if(count($transazione['items']) > 0) continue; //non è una transazione di coins
+
+					if(isset($data['in']) && !isset($data['all'])){
+						if(doubleval($transazione['balance']['amount']) < 0) continue;
+					}
+
+					if(isset($data['out']) && !isset($data['all'])){
+						if(doubleval($transazione['balance']['amount']) > 0) continue;
+					}
 
 					$output[Carbon::createFromTimestamp($transazione['timereceived'])->toDateTimeString()] = array(
 						'txid' => $transazione['txid'],
