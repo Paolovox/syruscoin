@@ -184,7 +184,7 @@ $(document).ready(function(){
       countTransactions();
   //    randomTransactions();
 
-},2000);
+},30000);
 
 
 
