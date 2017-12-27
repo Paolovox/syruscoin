@@ -390,7 +390,7 @@ class UserController extends Controller {
 
 	private function checkIfExistsTransaction($hash){
 		$transactions = $this->multichain->listStreamKeysCustom('transactions');
-		
+
 		if($transactions){
 			foreach ($transactions as $tran => $value) {
 				$transaction_key = $value['key'];
@@ -439,14 +439,19 @@ class UserController extends Controller {
 
 			$transazione_data = $this->multichain->setDebug(true)->getWalletTransaction($data['tx'], false, true);
 
+			$block = $this->multichain->setDebug(true)->getBlock($transazione_data['blockhash']);
+			$miner = $block['miner'];
+
 			$input = array(
 				"txid" => $data['tx'],
 				'coins' => $transazione_data['vout'][0]['amount'],
 				'address_to' => $transazione_data['vout'][0]['addresses'][0],
 				'address_from' => $transazione_data['vin'][0]['addresses'][0],
 				'block' => $transazione_data['blockindex'],
+				'block_hash' => $transazione_data['blockhash'],
 				'time' => Carbon::createFromTimestamp($transazione_data['timereceived'])->toDateTimeString(),
 				'state' => $transazione_data['valid'],
+				'miner' => $miner,
 
 			);
 

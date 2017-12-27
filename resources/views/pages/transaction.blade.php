@@ -4,7 +4,7 @@
 
 <style>
 .card{
-  width: 22%;
+  width: 16%;
 }
 
 </style>
@@ -31,10 +31,17 @@
       </div>
     </div>
 
+    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;" >
+      <div class="card-body">
+        <h5 class="card-title">Blocco Hash</h5>
+        <h5 style="text-align:center;color:#76e5a9;font-size:8px" class="card-title"><?= $block_hash ?></h5>
+      </div>
+    </div>
+
     <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
       <div class="card-body">
         <h5 class="card-title">Miner</h5>
-        <h5 style="text-align:center;color:#76e5a9" class="card-title"></h5>
+        <h5 style="text-align:center;color:#76e5a9;font-size:8px" class="card-title"><?= $miner ?></h5>
       </div>
     </div>
 
