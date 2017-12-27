@@ -390,6 +390,9 @@ class UserController extends Controller {
 
 	private function checkIfExistsTransaction($hash){
 		$transactions = $this->multichain->listStreamKeysCustom('transactions');
+
+		dd($transactions);
+		
 		if($transactions){
 			foreach ($transactions as $tran => $value) {
 				$transaction_key = $value['key'];
