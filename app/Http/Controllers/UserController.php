@@ -428,7 +428,6 @@ class UserController extends Controller {
 	//render transaction
 	public function transaction(){
 		$data = Request::all();
-		$input = array();
 
 		if(!isset($data['tx']) || empty($data['tx'])){
 			return view('pages.home', $input);
@@ -436,6 +435,19 @@ class UserController extends Controller {
 
 		//check if transaction exists
 		if($this->checkIfExistsTransaction($data['tx'])){
+
+			$transazione_data = $this->multichain->setDebug(true)->getWalletTransaction($data['tx'], false, true);
+
+			$input = array(
+				"txid" => $data['tx'],
+				'coins' => $transazione_data['vout'][0]['amount'],
+				'address_to' => $transazione_data['vout'][0]['addresses'][0],
+				'address_from' => $transazione_data['vin'][0]['addresses'][0],
+				'block' => $transazione_data['blockindex'],
+				'time' => Carbon::createFromTimestamp($transazione_data['timereceived'])->toDateTimeString(),
+				'state' => $transazione_data['valid'],
+
+			);
 
 			return view('pages.transaction', $input);
 

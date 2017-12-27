@@ -1,69 +1,6 @@
 @extends('layouts.default')
 @section('content')
 
-<style>
- .search{
-   background-color: #293641;
-   border: 2px solid #35485a;
- }
- .search:focus{
-   background-color: #293641;
-   color:white;
- }
- .addon-cerca{
-   background-image:none;
-   border: 2px solid #35485a;
-   background-color: #293641;
- }
- .card{
-   background-color: #124050 !important;
-   border-radius: 2% !important;
-   border: 0;
-   margin-left: 3%;
-   width: 13%;
-   text-align: center;
- }
- .card-title{
-   font-weight: bold !important;
-    margin-bottom: 0;
- }
- h5{
-   font-size: 13px;
- }
-
- table th{
-   color:white;
-   background-color: #293641;
-   border: 2px solid #35485a;
-   text-align: center;
-
- }
- .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-}
-
-table {
-    font-weight: 300;
-    padding: 0;
-    margin: 0;
-    font-size: 10px;
-    line-height: 18px;
-    position: relative;
-}
-
-table {
-    border-collapse: collapse;
-}
-
-tr:nth-child(n + 8) {
-    display: none;
-}
-
-table tr{
-  font-weight: bold;
-  color: #9ee3ff;
-}
-
-</style>
 
 <div class="row" style="width:100%;margin-top:3%">
 
@@ -247,7 +184,7 @@ $(document).ready(function(){
       countTransactions();
   //    randomTransactions();
 
-},30000);
+},2000);
 
 
 
