@@ -182,7 +182,7 @@ $(document).ready(function(){
       countMiners();
       currentDifficulty();
       countTransactions();
-  //    randomTransactions();
+      randomTransactions();
 
 },30000);
 

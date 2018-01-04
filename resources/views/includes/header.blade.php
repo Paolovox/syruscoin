@@ -16,6 +16,7 @@
   .navbar{
     box-shadow: 8px 4px 20px 1px #00000026;
     border: none;
+    height: 70px;
   }
   .navbar .nav-item.active .nav-link{
     font-weight: 600;
@@ -50,10 +51,10 @@
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="/">SYRUS COIN</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="/"><img src="/logo.png" style="height:100%"></a>
+  <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button>
+  </button> -->
 
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
